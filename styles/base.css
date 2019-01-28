@@ -14,7 +14,7 @@ body{
   box-sizing: border-box;
 }
 .container{
-  padding:80px;
+  padding:5%;
   /*Set height to 100% if content is less than screen size. otherwise, container-fluid will extend its height to accomadate the content size*/
 }
 button{
@@ -24,7 +24,7 @@ button:focus {outline:0;}
 .footer{
   position: relative;
   width:100%;
-  padding-left:80px;
+  padding-left:5%;
   padding-bottom: 20px;
   z-index:9999;
   color:rgb(52,58,64);

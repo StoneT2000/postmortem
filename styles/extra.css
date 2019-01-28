@@ -2,21 +2,21 @@
   --primary: rgb(50,146,219);
 }
 
-a {
+.container  a {
   color:#212529;
   border-bottom: 2px solid rgba(50,146,219, 0.6);
   transition: border 0.15s, color 0.15s;
 }
-a:hover{
+.container a:hover{
   border-bottom: 2px solid var(--primary);
   cursor: pointer;
   color:var(--primary) !important;
   
 }
-a:visited {
+.container a:visited {
   color:#212529;
 }
-a {
+.container a {
   text-decoration: none;
 
 }
