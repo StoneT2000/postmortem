@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+body{
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-weight: 300;
+  color:#212529;
+  background-color: #fefefe;
+  padding:0px;
+  width:100%;
+  margin:0px;
+  font-family: "Source Sans Pro","Segoe UI","Helvetica","Arial",sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+.container{
+  padding:80px;
+  /*Set height to 100% if content is less than screen size. otherwise, container-fluid will extend its height to accomadate the content size*/
+}
+button{
+  border:none;
+}
+button:focus {outline:0;}
+.footer{
+  position: relative;
+  width:100%;
+  padding-left:80px;
+  padding-bottom: 20px;
+  z-index:9999;
+  color:rgb(52,58,64);
+  display: block;
+  font-size:16px;
+}
+.footer a{
+  color: RGB(52,58,64);
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.footer span{
+  display: inline;
+  font-size: 12px;
+  font-weight: 300;
+  vertical-align: middle;
+}
+.octicon-mark-github, .octicon-mail{
+  fill: RGB(52,58,64);
+  -webkit-transition: fill 0.3s;
+  -o-transition: fill 0.3s;
+  transition: fill 0.3s;
+}
+.octicon-mark-github:hover, .octicon-mail:hover{
+  fill: RGB(26,29,32);
+}
+svg {
+  overflow: hidden;
+  vertical-align: middle;
+}
+code {
+  background-color: rgba(0,0,0,0.05);
+  border-radius: 4px;
+  padding:2px 4px 2px 4px;
+  font-family: "Source Code Pro", monospace;
+}
+
+h1, h2, h3, h4, h5, p {
+  font-weight:100;
+}
+p {
+  line-height: 1.8rem;
+}

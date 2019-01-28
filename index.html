@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Make sure mobile width is width of mobile viewport-->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Halite III Postmortem</title>
+  <!--README.MD like template-->
+  
+  <!-- Style sheets: Including Bootstrap and Font Awesome (svg icons) -->
+  <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
+  <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">-->
+  <link rel ="stylesheet" href="styles/base.css">
+  <link rel ="stylesheet" href="styles/extra.css">
+  
+  <!--Scripts: including jQuery and bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!--Add additional scripts here-->
+  <script src="scripts/base.js"></script>
+  <script src="scripts/elevator.min.js"></script>
+    
+</head>
+  <script>
+  var elevator;
+  $(document).ready(function(){
+    elevator = new Elevator({
+    mainAudio: '/music/elevator.mp3',
+    endAudio: '/music/ding.mp3'
+
+    });
+    $("#elevator").on('click', function(){
+      elevator.elevate();
+    })
+  });
+  </script>
+<body>
+  <div class="container">
+    <h1>Halite III post-mortem</h1>
+    <h3>- StoneT2000</h3>
+    <h5>January 30, 2019</h5>
+    <br>
+    <h2>Introduction</h2>
+    <p>
+    The <a href='https://halite.io/'>Halite 3 AI competition</a> has finally concluded and after too many <code>if</code> statements and <code>for</code> loops and a ton of hard work, I was able to rank <a>#65 globally</a>, and <a>#4 out of highschool students.</a>
+    </p>
+    <p>
+      Halite 3 was an amazing competition for me. It was my first time competing in Halite, and my 2nd time in an AI competition, my first being <a href='http://battlecode.org/'>MIT Battlecode 2018</a>, which really motivated me to pursue computer science further in my final years of highschool and hopefully university. I cannot thank Two Sigma and the team behind Halite 3 for hosting such a smooth and brilliant AI competition!
+    </p>
+    <p>
+      If you don't know what Halite 3 is or need a refresher, check out the game rules <a href='https://halite.io/learn-programming-challenge/game-overview'>here.</a> They are simple and quick to understand (and the rest of this post-mortem will make more sense).
+    </p>
+    <p>By the way, I wrote my bot in JavaScript and ranked <a href='https://halite.io/programming-competition-leaderboard?language=JavaScript'>#1 out of all JavaScript bots</a>, although this doesn't really mean much compared to my global and high school student rankings and the reason why will be explained below</p>
+    <hr>
+    <h2>My Approach and Setup</h2>
+    <p>
+      I approached Halite 3 as more of a competition that tests your ability to model with the highest accuracy of the most optimal play with some special strategies sprinkled in. For me at least, this competition was less about knowing your AI algorithms such as <a href='https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm'>Dijkstra's algorithm</a> or even  data structures such as <a href='https://en.wikipedia.org/wiki/Linked_list'>linked lists</a> or <a href='https://en.wikipedia.org/wiki/Graph_(abstract_data_type)'>graphs</a> (all of which I didn't use in my bot and as always KISS - Keep It Simple Stupid), and more about how well you can model the game and make the best decision for each entity at each turn. Additionally, one of the key reasons behind not using the popular Dijkstra's algorithm is because my bot is fairly <i>narrow-sighted</i>, meaning it doesn't look ahead that far and performs all its moves fairly locally. There are nice applications of it as seen in some of the other top bots post-mortems and would have definitely improved my bot a little, but I never came around to using any of those applications.
+    </p>
+    <p>Saying that, I do not believe I did that good of a job of <i>modeling</i> and more of went by intuition and used really simple methods to help abstract the game a little and achieve results. If you take a look at the 3rd place competitor <a href='https://recursive.cc/blog/halite-iii-postmortem.html'>reCurse's post-mortem</a>, he shares some very interesting models and how he uses it to gain that extra competitive edge and I HIGHLY recommend reading through that.</p>
+    <p>But following the approach of competing with good modeling and strategical thinking, is the key reason why I chose to use JavaScript (another reason being that it is my most proficient language, ahead of Java, Python and C, and I love web development). With JS, I don't need to worry about memory management, variable types, and all that low-level programming that probably could speed up my bot by a lot. Additionally, I do believe that the 2 second time limit for each turn in Halite is a little too generous because my JS bot consistently ran each turn in 100ms or less. Hence code efficiency was not an issue (although it made running local matches a bit of a pain). So with JS, I was able to quickly implement any of my ideas and models without frequently running into bugs. This saved me a lot of brain power and time for other things in life such as school and exams.</p>
+    <p>
+      I also recognize that having a good workflow is key to pushing out new code efficiently with fewer bugs and speed up the entire programming process. Again, reCurse has an excellent workflow, you should really check out his post-mortem where he shares his "Battlestation." I, on the other hand, had a horrible workflow. Because I love web development, I practically use the <a href='http://brackets.io/'>Adobe Brackets</a> for all my programming (its local server and live preview functions are just 👌). Hence? I continued to use Brackets for programming my Halite bot. I'm still a high school student and have yet to learn a lot of standard approaches to programming (such as using an IDE). The only good part of my workflow is some file organization and using Git for source control, keeping my sanity in check. Another nice part of my bot is that it uses 0 random variables to run. This makes it really easy to replay an entire game and get the same exact results and was fairly helpful for running local matches.
+    </p>
+    <p>
+      Competing in Halite 3 did force me to learn some Bash in order to easily run my own local matches between my bot and old bots and implement various features that I wanted. One of which is testing my new bot against an old bot twice with a team switch in the middle. If you read the game specs, you might ask "Why do you need to test it twice? The entire map is symmetrical, wouldn't the same exact game be played out?" My answer: I don't know why, but different results appear, despite my bot having 0 random variables. Generally, through my own local match runner, I was able to determine with higher accuracy whether my new bot is better than my old bot. This allowed me to make sure subsequently submitted bots are working the way I intend to and are actually better than the previous one (don't want to drop in rankings!)
+    </p>
+    <hr>
+    <h2>High Level Bot Overview</h2>
+    <p>My bot was "simple" in that it doesn't use really advanced modeling techniques to do fairly well against most competitors</p>
+    <p>Generally, in each turn, the following occurs
+    </p>
+    <ul>
+      <li>Process the current game state (total halite, halite density, enemy locations/behavior etc.)</li>
+      <li>Make decisions as to whether to spawn more ships or stack halite to prepare to build a dropoff</li>
+      <li>Before looping through each ship and deciding on what it should do, organize the order in which we loop through our own ships</li>
+      <li>Depending on a status the ship has, appropriately decide on what the ship should do</li>
+      <li>Finalize the direction ships move in and make sure friendly collisions are avoided</li>
+    </ul>
+    <hr>
+    <h3>Processing the current game state</h3>
+    <p>Before looping through each ship and deciding on where they should move, we first process the current game state.
+    </p>
+    <p>The key things we process is the total halite left and optimal dropoff locations. These are stored into a variable for future decision making by our ships. There are some other things going on here that help organize the ships a little bit, but I won't bother with the details in this section, they will be referred to in a future section.</p>
+    <p>Yup, that's it. My bot is somewhat "simplistic."</p>
+    <hr>
+    <h3>Spawning Ships</h3>
+    This was it:
+    <p><code>if ((game.turnNumber &lt; 0.65 * hlt.constants.MAX_TURNS &amp;&amp; numShips &le; 1.7*Math.sqrt(mapSize))</code>
+    <br>
+    and
+      <br>
+    <code>if (averageHalite >= 50, (60 for 4P games))</code>
+      <br>
+      and
+      <br>
+      <code>if (designatedDropoffBuildPositions.length >= 1
+&amp;&amp; me.haliteAmount >= hlt.constants.DROPOFF_COST + 500)</code>
+      <br>
+      Essentially, if it isn't too late into the game, number of ships we own is less than 1.7 * sqrt(mapSize), average halite per tile left on the maps is ≥ 50 (60 for 4 player games), and if we have decided to build a dropoff, we need enough halite to build the dropoff first before spawning more ships, else if we didn't decide to build a dropoff, build a ship. There are some other if statements involved and a bit of code that prevents our bot from spawning a ship when there are too many ships surrounding the shipyard, but that didn't have much impact on my bot's performance.
+    </p>
+    <p>
+      The values 0.65, 50, 1.7, 500, etc... are what I call "Magic Numbers." They are partly based on intuition, from what I saw on replays of top bots, and some optimization through running my bot against itself with different parameters. I did attempt to use a machine learning library at one point to try and optimize some parameters but quickly found out that 1. I don't have enough data from running matches against myself to make any reasonable conclusions and 2. I really need to learn more machine learning concepts to better understand how to effectively use the library. You will see many more magic numbers in my source code if you choose to look through it. My code is hopefully nicely commented.
+    </p>
+    <hr>
+    <h3>Organization of ships</h3>
+    <p>
+      I found this to be fairly important, especially when it comes to dealing with some edge cases in my collision management code. But this also helped improve the efficiency of the bot and allowed the more important ships to get first pick on what to do.
+      
+      Here's a quick ordered list of the priority in which ships get to make their decision
+    </p>
+    <ol>
+      <li>
+        Ships that can't move due to lack of halite</li>
+    <li>Ships that are on our own shipyard or dropoff</li>
+    <li>Ships that are trying to build a dropoff</li>
+    <li>Ships that are going to a dropoff location</li>
+    <li>Ships that are performing their final return to the shipyard or dropoff location in the endgame</li>
+    <li>Ships that are just returning to deliver their halite</li>
+    <li>Ships that are near enemy dropoffs and trying to block them</li>
+    <li>All other ships </li>
+    </ol>
+    <hr>
+    <h3>Deciding what to do (or really just where to move)</h3>
+    <p>Halite III ultimately boils down to where do you move a ship. (Along with the occasional building actions and spawning actions). As thus, this is how I primarily structured my code. All my decision code for each ship will eventually return a sorted array of directions in order of priority (and no collisions), of which the first direction in the array is what will be executed.
+    <p>
+      Each ship is assigned a status/goal, implying what it's trying to do this turn, and is probably one of <code>'return', 'mine', 'leaveAnywhere', 'buildDropoff', 'final', 'goingToBuildDropoff', 'blockDropoff'</code>
+    </p>
+    <code>Switch(status){</code>
+    <h4><code>'mine':</code></h4>
+    <p>
+      This is where all the mining code happens. Mining is possibly the most important aspect of the game (it helps you win  unless you are one of those guys who doesn't mine and tries to collide with the opponent). This is also possibly my bot's biggest flaw :( ... I have to say, the heuristic I used for deciding on which location a ship should try to go to and mine is <i>too simple</i>. Theoretically, the method of calculating the rate at which halite will be mined or assigning a specific score to each tile taking factors such as turn count, distance, cost to go there, etc. should be really optimal mining code. I did that. My bot didn't like it and performed worse against my <i>simple</i> heuristic. Ok enough talk and typing, this is my heuristic:
+    </p>
+    <p>
+      The ships search in Manhattan radius of 20 and looks for the tile with the highest <code>ratio = R</code>
+      <br>
+      Where
+      <br>
+      <code>R = (Halite At That Tile - Halite Cost to Reach That Tile) / ((Distance To That Tile + 1.5) * Halite At The Tile The Ship is On)</code>
+      <br>
+      If the tile is within a radius of 1 from the ship, and the ship has inspiration on that tile, <code>R</code> is multiplied by <code>3</code>.
+      <br>
+      Intuitively, this method will work and makes sense. By dividing by distance, the ships are discouraged from going too far away to mine. By dividing by the halite at the tile the ship is on, we get a ratio. (Actually, as of writing this, I just realized there's no need for a ratio, just divide by distance and the same result occurs...)
+      
+    </p>
+    <h4><code>'return':</code></h4>
+    <p>
+      If the ship has over <code>1000/1.02 = 980.3921568627</code> halite in cargo (another magic number), it will return to the nearest dropoff/shipyard to store it. This was somewhat optimized for my bot through running a bunch of matches against myself, but again its a magic number and its origins are partially unknown.
+    </p>
+    <p>
+      Additionally, these ships also attempt to attack the opponent by crashing into enemy ships with at least 1.5 times the amount of halite in their ship than our ship and if there are at least 2 friendly ships nearby to help pick up the remains.
+    </p>
+    <h4><code>'goingToBuildDropoff':</code></h4>
+    <p>This status is just for ships that are designated to go and build a dropoff at one of the previously decided (in game state procession) optimal dropoff locations. Nothing fancy happens, the ship just moves towards its target destination.
+    </p>
+    <h4><code>'buildDropoff':</code></h4>
+    <p>Ship is preparing to build a dropoff and will stay still</p>
+    <h4><code>'final':</code></h4>
+    <p>This is a special status given to ships to do the same thing as returning but allow for collisions if within 3 units of the nearest dropoff/shipyard. This allows us to quickly store all our mined halite ASAP as friendly collisions don't matter anymore in the end game</p>
+    <h4><code>'blockDropoff':</code></h4>
+    <p>
+      All ships with this status will look for the nearest reachable dropoff (in the turns left) that has the most enemies nearby and attempt to block it. This is done at the end of the game and often helps me win some tight games by forcing the opponent to drop a lot of their halite through collision or not store any at all. Generally, blocking a dropoff follows the following rules
+    </p>
+    <ul>
+      <li>Position our ship in front of the direction of the enemy dropoff where there are the most ships in that direction.</li>
+      <li>Never allow our ship to be over the enemy dropoff (or else if it collides, the enemy gets all the halite anyway) if there are enemies really close. This also means for a ship to be repositioned on another side of the enemy dropoff, it will have to travel around the enemy dropoff.</li>
+      <li>Try to cover all directions and keep shifting around (seems to confuse a lot of enemy bots if we keep moving)</li>
+    </ul>
+    <hr>
+    <h3>Finalizing ship movement and managing collisions</h3>
+    <p>
+      The previous section gave each ship a role and a destination to try and move to. In giving this destination, the bot finds the most viable directions to go closer to that destination.
+      Generally, our ships will take a greedy approach, and always avoid locations where a collision with the enemy may occur. Movement is finalized in the order in which the ships are looped through, which was already sorted by priority.
+    </p>
+    <p>
+      The bot runs a function that returns an array of every possible direction the ship can move in, ordered in desirability, with the first direction the most desirable and last direction least desirable. Desirability mostly depends on which direction is safe from enemy collisions and which get the ship closer to its destination. After the array of directions are found, we compare the first direction with the finalized direction of all the ships looped over before this one. If there is a conflict that could lead to two ships colliding, we then compare the next direction in the array. We keep doing this until we find the most desirable direction that avoids collisions.
+    </p>
+    <p>However, there are some edge cases where a ship will have no viable move that avoids collisions. At this point, the ship just moves in its most desired direction and tells the ship that conflicted with this ship to choose a separate direction that doesn't collide with anyone to move in. This is usually more than enough to ensure unwarranted friendly collisions do not occur.</p>
+    <hr>
+    <h2>Conclusion</h2>
+    <p>Halite III was fun, interesting, and a joy to compete in. I can't wait to compete in future Halite AI competitions and cannot express how grateful I am for Two Sigma and the team behind Halite to help host this competition. I certainly learned a lot about programming through this and became more experienced in terms of using tools to help me organize my code and speed up the development process (such as Git, which I, unfortunately, did not use in Battlecode 2018). Halite III really helped me get even more hooked into the fields of AI and machine learning, and I would highly <span class='bold'>recommend</span> this competition to any budding programmer, even if you only just started to program.</p>
+    <p>Thanks for reading this post-mortem to its very end, or if you just skimmed through this, please click the elevator button (kindly borrowed from <a href='https://github.com/tholman'>Tim Holman</a>) to go back and read the rest >:( 
+    <br>
+    <svg class="sweet-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" height="100px" width="100px" id="elevator">
+        <path d="M70,47.5H30c-1.4,0-2.5,1.1-2.5,2.5v40c0,1.4,1.1,2.5,2.5,2.5h40c1.4,0,2.5-1.1,2.5-2.5V50C72.5,48.6,71.4,47.5,70,47.5z   M47.5,87.5h-5v-25h5V87.5z M57.5,87.5h-5v-25h5V87.5z M67.5,87.5h-5V60c0-1.4-1.1-2.5-2.5-2.5H40c-1.4,0-2.5,1.1-2.5,2.5v27.5h-5  v-35h35V87.5z"></path>
+        <path d="M50,42.5c1.4,0,2.5-1.1,2.5-2.5V16l5.7,5.7c0.5,0.5,1.1,0.7,1.8,0.7s1.3-0.2,1.8-0.7c1-1,1-2.6,0-3.5l-10-10  c-1-1-2.6-1-3.5,0l-10,10c-1,1-1,2.6,0,3.5c1,1,2.6,1,3.5,0l5.7-5.7v24C47.5,41.4,48.6,42.5,50,42.5z"></path>
+    </svg>
+    <br>(jk)
+    </p>
+  </div>
+  <footer class="footer">
+    <span style="margin-right:4px;">By Stone T. @ Github</span><a href="https://github.com/StoneT2000"><svg height="24" width="24" class="octicon octicon-mark-github" viewBox="0 0 20 20" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a><span style="border-right: 1px solid #212529;margin:0px 10px 0px 10px;"></span><span style="margin-right:4px;">Email</span><a href="mailto:stonezt2019@gmail.com"><svg width="28" height="28" class="octicon octicon-mail" viewBox="0 0 20 18" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M0 4v8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1H1c-.55 0-1 .45-1 1zm13 0L7 9 1 4h12zM1 5.5l4 3-4 3v-6zM2 12l3.5-3L7 10.5 8.5 9l3.5 3H2zm11-.5l-4-3 4-3v6z"></path></svg></a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,39 @@
+:root {
+  --primary: rgb(50,146,219);
+}
+
+a {
+  color:#212529;
+  border-bottom: 2px solid rgba(50,146,219, 0.6);
+  transition: border 0.15s, color 0.15s;
+}
+a:hover{
+  border-bottom: 2px solid var(--primary);
+  cursor: pointer;
+  color:var(--primary) !important;
+  
+}
+a:visited {
+  color:#212529;
+}
+a {
+  text-decoration: none;
+
+}
+#elevator {
+  width:46px;
+  position: relative;
+  left:50%;
+  margin-left:-23px;
+  cursor:pointer;
+  fill:rgba(0,0,0,0.7);
+  transition: fill 0.2s;
+}
+#elevator:hover {
+  fill:#212529;
+  cursor:pointer;
+}
+.bold {
+  font-weight:500;
+  color:var(--primary)
+}
